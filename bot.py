@@ -138,7 +138,8 @@ async def _unregister(ctx,): # Defines a new "context" (ctx) command called "pin
 
 def removekey(d, key):
     r = dict(d)
-    del r[key]
+    if key in r.keys():
+        del r[key]
     return r
 
 def removeFromUserData(id):
