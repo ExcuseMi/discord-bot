@@ -12,14 +12,12 @@ import traceback
 
 options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
-options.add_argument('--disable-browser-side-navigation')
 
 options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
 
 def getAllStats(users):
     driver = webdriver.Chrome(options=options)
-
     map = {}
 
     for user in users:
@@ -28,7 +26,8 @@ def getAllStats(users):
         except:
             traceback.print_exc()
         finally:
-            driver.close()
+            if driver:
+                driver.close()
 
     return map
 
