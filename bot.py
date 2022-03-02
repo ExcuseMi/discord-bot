@@ -173,7 +173,7 @@ async def on_ready():
 import asyncio
 import traceback
 
-timerDelay = 60*5
+timerDelay = 10*1
 async def my_background_task():
     await bot.wait_until_ready()
     channel = await bot.fetch_channel(CHANNEL) # replace with channel_id
