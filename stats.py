@@ -20,14 +20,17 @@ driver = webdriver.Chrome(options=options)
 
 def getAllStats(users):
     driver = webdriver.Chrome(options=options)
+
     map = {}
+
     for user in users:
         try:
             map[user] = getStats(user)
         except:
             traceback.print_exc()
+        finally:
+            driver.close()
 
-    driver.close()
     return map
 
 
