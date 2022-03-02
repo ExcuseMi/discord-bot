@@ -80,8 +80,8 @@ def getBestRank(stat):
 def findRLRoles(member):
     rlRoles = []
     for role in member.roles:   
-        if role in ranks.keys():
-            rlRoles.append(member)
+        if role.name in ranks.keys():
+            rlRoles.append(role)
     return rlRoles
 
 def findRole(roles, name):
@@ -109,7 +109,8 @@ async def processData(stats):
                     if role:
                         await member.add_roles(role, atomic=True)
                 for rlRole in rlRoles:
-                    await member.remove_roles(rlRole)
+                    if rlRole.name != bestRank:
+                        await member.remove_roles(rlRole)
 
 
 @slash.slash(name="rl-register", description="Register to have the DireBot read your rocket league rank.", guild_ids=guild_ids, options=[
@@ -121,17 +122,19 @@ async def processData(stats):
     )
   ]
 )
-async def _register(ctx, epic_username): # Defines a new "context" (ctx) command called "ping."
+async def _register(ctx, epic_username):
     addToUserData(ctx.author.id, epic_username)
     await ctx.send("You been added to the RL registry!")
 
 @slash.slash(name="rl-unregister", description="Unregister", guild_ids=guild_ids
 )
-async def _unregister(ctx,): # Defines a new "context" (ctx) command called "ping."
+async def _unregister(ctx,):
     removeFromUserData(ctx.author.id)
-    rlRoles = findRLRoles(ctx.author)
-    for rlRole in rlRoles:
-        await ctx.author.remove_roles(rlRole)
+    member = await ctx.guild.fetch_member(ctx.author.id)
+    rlRoles = findRLRoles(member)
+    if len(rlRoles) > 0:
+        for rlRole in rlRoles:
+            await ctx.author.remove_roles(rlRole)
     await ctx.send("You been removed from the registry!")
 
 
@@ -168,13 +171,13 @@ async def on_ready():
     #    if role.name in ranks.keys():
     #        await role.delete()
     
-
-    for rank in list(ranks.keys()):
-        role = findRole(guild.roles, rank)
-        if(role == None):
-            role = await guild.create_role(name=rank, hoist=True, colour=ranks[rank]['color'], mentionable=True)
-        else:
-            await role.edit(hoist=True, colour=ranks[rank]['color'], mentionable=True)
+    if False:
+        for rank in list(ranks.keys()):
+            role = findRole(guild.roles, rank)
+            if(role == None):
+                role = await guild.create_role(name=rank, hoist=True, colour=ranks[rank]['color'], mentionable=True)
+            else:
+                await role.edit(hoist=True, colour=ranks[rank]['color'], mentionable=True)
 
     print(
         f'{bot.user} is connected to the following guild: \n' 
@@ -206,10 +209,9 @@ async def my_background_task():
             jsonStr = json.dumps(stats, indent=4)
             if lastResultJson != jsonStr:
                 await processData(stats)
-            lastResultJson = jsonStr
-            with open('stats.json', "w") as outfile:
-                outfile.write(jsonStr)
-
+                lastResultJson = jsonStr
+                with open('stats.json', "w") as outfile:
+                    outfile.write(jsonStr)
         except:
             traceback.print_exc()
       
