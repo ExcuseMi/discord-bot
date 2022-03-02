@@ -11,9 +11,6 @@ from selenium.common.exceptions import NoSuchElementException
 import urllib.parse
 import traceback
 
-ua = UserAgent()
-userAgent = str(ua.chrome)
-session = requests.Session()
 options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
