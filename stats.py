@@ -27,7 +27,10 @@ def getAllStats(users):
             traceback.print_exc()
         finally:
             if driver:
-                driver.close()
+                try:
+                    driver.quit()
+                except:
+                    traceback.print_exc()
 
     return map
 
