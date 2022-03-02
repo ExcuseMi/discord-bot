@@ -173,7 +173,7 @@ async def on_ready():
 import asyncio
 import traceback
 
-timerDelay = 10*1
+timerDelay = 60*10
 async def my_background_task():
     await bot.wait_until_ready()
     channel = await bot.fetch_channel(CHANNEL) # replace with channel_id
@@ -182,13 +182,11 @@ async def my_background_task():
         try:
             stats = getAllStats()
             jsonStr = json.dumps(stats, indent=4)
-            #if lastResultJson != jsonStr:
-                #for s in stats:
-                    #await channel.send(s + ': ' + json.dumps(stats[s], indent=4))
+            if lastResultJson != jsonStr:
+                await processData(stats)
             lastResultJson = jsonStr
             with open('stats.json', "w") as outfile:
                 outfile.write(jsonStr)
-            await processData(stats)
 
         except:
             traceback.print_exc()
