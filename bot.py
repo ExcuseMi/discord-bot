@@ -122,10 +122,29 @@ async def processData(stats):
   ]
 )
 async def _register(ctx, epic_username): # Defines a new "context" (ctx) command called "ping."
-    ctx.author.id
     addToUserData(ctx.author.id, epic_username)
     await ctx.send("You been added to the RL registry!")
 
+@slash.slash(name="rl-unregister", description="Unregister", guild_ids=guild_ids
+)
+async def _unregister(ctx,): # Defines a new "context" (ctx) command called "ping."
+    removeFromUserData(ctx.author.id)
+    rlRoles = findRLRoles(ctx.author)
+    await ctx.author.remove_roles(rlRoles)
+    await ctx.send("You been removed from the registry!")
+
+
+def removekey(d, key):
+    r = dict(d)
+    del r[key]
+    return r
+
+def removeFromUserData(id):
+    users = getUsers()
+    users = removekey(users, str(id))
+    jsonStr = json.dumps(users, indent=4)
+    with open(userFile, "w") as outfile:
+        outfile.write(jsonStr)
 
 def addToUserData(id, epic_username):
     users = getUsers()
