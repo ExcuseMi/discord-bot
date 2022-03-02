@@ -1,6 +1,5 @@
 import re
 import requests
-from fake_useragent import UserAgent
 import time
 import json
 from selenium import webdriver
