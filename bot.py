@@ -130,8 +130,10 @@ async def _register(ctx, epic_username): # Defines a new "context" (ctx) command
 async def _unregister(ctx,): # Defines a new "context" (ctx) command called "ping."
     removeFromUserData(ctx.author.id)
     rlRoles = findRLRoles(ctx.author)
-    await ctx.author.remove_roles(rlRoles)
+    for rlRole in rlRoles:
+        await ctx.author.remove_roles(rlRole)
     await ctx.send("You been removed from the registry!")
+
 
 
 def removekey(d, key):
