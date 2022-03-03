@@ -236,6 +236,8 @@ async def readFullHistory( vipId):
                 while (len(messages) > 0):
                     vipMessages = filter(lambda message: message.author.id == int(vipId), messages)
                     myMesssages = list(filter(lambda message: message != None, map(lambda message : parseMessage(message), vipMessages)))
+                    for m in myMesssages:
+                        log('vip-content: ' + m['content'])
                     messageList.extend(myMesssages)
                     messages = await channel.history(limit=limit, before=messages[-1].created_at).flatten()
 
