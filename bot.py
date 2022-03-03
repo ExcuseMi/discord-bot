@@ -330,6 +330,7 @@ async def my_background_task():
         else:
             await readFullHistory(VIP)
         try:
+            print('Getting rocket league stats')
             stats = getAllStats()
             jsonStr = json.dumps(stats, indent=4)
             if lastResultJson != jsonStr:
@@ -337,6 +338,8 @@ async def my_background_task():
                 lastResultJson = jsonStr
                 with open('stats.json', "w") as outfile:
                     outfile.write(jsonStr)
+            print('Done rocket league stats')
+
         except:
             traceback.print_exc()
       
