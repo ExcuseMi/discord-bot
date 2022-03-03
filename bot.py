@@ -147,14 +147,18 @@ async def _wwds(ctx, keyword = None):
             if len(messages) > 0:
                 random_item = random.choice(messages)
                 member = await ctx.guild.fetch_member(int(VIP))
-                timestamp = parser.parse(random_item['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+                timestamp = parser.parse(random_item['created_at'])
+    
                 embed = discord.Embed(
                             colour=discord.Colour(0xE5E242),
                             url=random_item['url'],
-                            title="What " + member.display_name + " said on " + timestamp + ":",
-                            description='' + random_item['content'] + ''
+                            timestamp=timestamp,
+                            description=random_item['content']
                         )
+
+
                 embed.set_author(name=member.display_name, icon_url=member.avatar_url)
+                embed.set_footer(text='That\'s what ' + member.display_name + ' said!')  
                 await ctx.send(embed=embed)         
             else:
                 await ctx.send('Nothing found')
@@ -327,32 +331,42 @@ async def on_ready():
 
 import asyncio
 import traceback
+import threading
+timerDelay = 60*1
+lastResultJson = None
 
-timerDelay = 60*10
 async def my_background_task():
     await bot.wait_until_ready()
-    lastResultJson = None
     while not bot.is_closed():
+        await updateVipPosts()
+        await updateStats()
+        await asyncio.sleep(timerDelay)
+async def updateVipPosts():
+    try:
         vipQuotes = getVipQuotes()
         if vipQuotes != None and vipQuotes.get('lastReadMessage') != None:
             await readPartialHistory(VIP)
         else:
             await readFullHistory(VIP)
-        try:
-            log('Getting rocket league stats')
-            stats = getAllStats()
-            jsonStr = json.dumps(stats, indent=4)
-            if lastResultJson != jsonStr:
-                await processData(stats)
-                lastResultJson = jsonStr
-                with open('stats.json', "w") as outfile:
-                    outfile.write(jsonStr)
-            log('Done rocket league stats')
-
-        except:
-            traceback.print_exc()
-      
-        await asyncio.sleep(timerDelay)
+    except:
+       traceback.print_exc()
+async def updateStats():
+    try:
+        if os.path.exists(userFile):
+            with open('stats.json',) as f:
+                previousJson = f.read()
+        else:
+            previousJson = None
+        log('Getting rocket league stats')
+        stats = getAllStats()
+        jsonStr = json.dumps(stats, indent=4)
+        if previousJson != jsonStr:
+            await processData(stats)
+            with open('stats.json', "w") as outfile:
+                outfile.write(jsonStr)
+        log('Done rocket league stats')
+    except:
+        traceback.print_exc()
 
 bot.loop.create_task(my_background_task())
 
