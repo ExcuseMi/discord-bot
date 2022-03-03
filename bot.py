@@ -114,7 +114,7 @@ async def processData(stats):
                 guild = await bot.fetch_guild(guild_ids[0])
                 member = await guild.fetch_member(int(user))
                 rlRoles = findRLRoles(member)
-                print(member.name + ': ' + bestRank)
+                log(member.name + ': ' + bestRank)
                 if not bestRank in rlRoles:
                     roles = await guild.fetch_roles()
                     role = findRole(roles, bestRank)
@@ -224,7 +224,7 @@ def sortQuoteBy(quote):
     return quote['created_at']
 
 async def readFullHistory( vipId):
-    print('Reading full history')
+    log('Reading full history')
     vipQuotes = getVipQuotes()
     messageList = vipQuotes['messages']
     limit = 200
@@ -246,12 +246,13 @@ async def readFullHistory( vipId):
     jsonStr = json.dumps(vipQuotes, indent=4)
     with open(vipQuoteFile, "w") as outfile:
         outfile.write(jsonStr)
-    print('Done Reading full history')
+    log('Done Reading full history')
 
-
+def log(message):
+    print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ": " + message)
 
 async def readPartialHistory(vipId):
-    print('Reading partial history')
+    log('Reading partial history')
 
     limit = 100
     vipQuotes = getVipQuotes()
@@ -280,7 +281,7 @@ async def readPartialHistory(vipId):
     jsonStr = json.dumps(vipQuotes, indent=4)
     with open(vipQuoteFile, "w") as outfile:
         outfile.write(jsonStr)
-    print('Done Reading partial history')
+    log('Done Reading partial history')
 
 @bot.event
 async def on_ready():
@@ -300,7 +301,7 @@ async def on_ready():
             else:
                 await role.edit(hoist=True, colour=ranks[rank]['color'], mentionable=True)
 
-    print(
+    log(
         f'{bot.user} is connected to the following guild: \n' 
         f'{guild.name} (id: {guild.id})'
     )
@@ -312,9 +313,9 @@ async def on_ready():
     members = '\n - '.join([member.name + '-' + str(member.id) for member in guild.members])
     roles = '\n - '.join([role.name + '-' + str(role.position) for role in guild.roles])
 
-    print(f'Guild Channels:\n - {channels}')
-    print(f'Guild Members:\n - {members}')
-    print(f'Guild Roles:\n - {roles}')
+    log(f'Guild Channels:\n - {channels}')
+    log(f'Guild Members:\n - {members}')
+    log(f'Guild Roles:\n - {roles}')
 
 import asyncio
 import traceback
@@ -330,7 +331,7 @@ async def my_background_task():
         else:
             await readFullHistory(VIP)
         try:
-            print('Getting rocket league stats')
+            log('Getting rocket league stats')
             stats = getAllStats()
             jsonStr = json.dumps(stats, indent=4)
             if lastResultJson != jsonStr:
@@ -338,7 +339,7 @@ async def my_background_task():
                 lastResultJson = jsonStr
                 with open('stats.json', "w") as outfile:
                     outfile.write(jsonStr)
-            print('Done rocket league stats')
+            log('Done rocket league stats')
 
         except:
             traceback.print_exc()
