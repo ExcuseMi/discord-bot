@@ -145,12 +145,14 @@ async def _wwds(ctx, keyword = None):
             if len(messages) > 0:
                 random_item = random.choice(messages)
                 member = await ctx.guild.fetch_member(int(VIP))
+                timestamp = parser.parse(random_item['created_at']).strftime("%Y-%m-%d %H:%M:%S")
                 embed = discord.Embed(
                             colour=discord.Colour(0xE5E242),
                             url=random_item['url'],
-                            title='“' + random_item['content'] + '”'
+                            title="What " + member.display_name + " said on " + timestamp + ":",
+                            description='“' + random_item['content'] + '”'
                         )
-                embed.set_author(name=member.display_name)
+                embed.set_author(name=member.display_name, icon_url=member.avatar_url)
                 await ctx.send(embed=embed)         
             else:
                 await ctx.send('Nothing found')
@@ -222,7 +224,7 @@ def sortQuoteBy(quote):
     return quote['created_at']
 
 async def readFullHistory( vipId):
-    print('Reading for full history')
+    print('Reading full history')
     vipQuotes = getVipQuotes()
     messageList = vipQuotes['messages']
     limit = 200
@@ -247,6 +249,8 @@ async def readFullHistory( vipId):
 
 
 async def readPartialHistory(vipId):
+    print('Reading partial history')
+
     limit = 100
     vipQuotes = getVipQuotes()
     messageList = vipQuotes['messages']
