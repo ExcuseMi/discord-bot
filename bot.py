@@ -152,6 +152,7 @@ async def _wwds(ctx, keyword = None):
                 embed = discord.Embed(
                             colour=discord.Colour(0xE5E242),
                             url=random_item['url'],
+                            title="What would " + member.display_name + " say?",
                             timestamp=timestamp,
                             description=random_item['content']
                         )
