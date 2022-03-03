@@ -223,7 +223,7 @@ def getVipQuotes():
     return vipQuotes
 
 def parseMessage(message):
-    if message.content:
+    if message.content and len(message.embeds) == 0:
         return { 'id' : message.id, 'content': message.content, 'authorid': message.author.id, 'created_at': message.created_at.isoformat(), 'url': message.jump_url, 'channel': message.channel.id}
     return None
 def sortQuoteBy(quote):
@@ -332,7 +332,7 @@ async def on_ready():
 import asyncio
 import traceback
 import threading
-timerDelay = 60*1
+timerDelay = 60*10
 lastResultJson = None
 
 async def my_background_task():
