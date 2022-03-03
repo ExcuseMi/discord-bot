@@ -8,8 +8,10 @@ from discord.ext import commands, tasks
 from discord_slash import SlashCommand, SlashContext
 from discord_slash.utils.manage_commands import create_choice, create_option
 from dateutil import parser
+from datetime import timezone
 import datetime
 import random
+import pytz
 
 ranks = {
     'Supersonic Legend' : { 'color': discord.Colour(0x65186D)}, 
@@ -150,7 +152,7 @@ async def _wwds(ctx, keyword = None):
                             colour=discord.Colour(0xE5E242),
                             url=random_item['url'],
                             title="What " + member.display_name + " said on " + timestamp + ":",
-                            description='“' + random_item['content'] + '”'
+                            description='' + random_item['content'] + ''
                         )
                 embed.set_author(name=member.display_name, icon_url=member.avatar_url)
                 await ctx.send(embed=embed)         
@@ -237,13 +239,13 @@ async def readFullHistory( vipId):
                     vipMessages = filter(lambda message: message.author.id == int(vipId), messages)
                     myMesssages = list(filter(lambda message: message != None, map(lambda message : parseMessage(message), vipMessages)))
                     for m in myMesssages:
-                        log('vip-content: ' + m['content'])
+                        log('vip-content - ' + m['created_at'] + '-' + m['content'])
                     messageList.extend(myMesssages)
                     messages = await channel.history(limit=limit, before=messages[-1].created_at).flatten()
 
     messageList.sort(key=sortQuoteBy)
     vipQuotes['messages'] = messageList
-    vipQuotes['lastReadMessage'] = datetime.datetime.now().isoformat()
+    vipQuotes['lastReadMessage'] = datetime.datetime.now(pytz.utc).replace(tzinfo=None).isoformat()
 
     jsonStr = json.dumps(vipQuotes, indent=4)
     with open(vipQuoteFile, "w") as outfile:
@@ -263,6 +265,7 @@ async def readPartialHistory(vipId):
         lastReadMessage = parser.parse(vipQuotes['lastReadMessage'])
     else:
         lastReadMessage = None
+    log('lastReadMessage: ' + vipQuotes['lastReadMessage'])
     bannedChannels = getBannedChannels()
 
     for guild in bot.guilds:
@@ -273,13 +276,16 @@ async def readPartialHistory(vipId):
                 while (len(messages) > 0):
                     vipMessages = filter(lambda message: message.author.id == int(vipId), messages)
                     myMesssages = list(filter(lambda message: message != None, map(lambda message : parseMessage(message), vipMessages)))
+                    for m in myMesssages:
+                        log('vip-content - ' + m['created_at'] + '-' + m['content'])
+
                     messageList.extend(myMesssages)
-                    lastReadMessage = messages[0].created_at
+                    lastReadMessage = messages[-1].created_at
                     messages = await channel.history(limit=limit, after=lastReadMessage).flatten()
 
     messageList.sort(key=sortQuoteBy)
     vipQuotes['messages'] = messageList
-    vipQuotes['lastReadMessage'] = datetime.datetime.now().isoformat()
+    vipQuotes['lastReadMessage'] = datetime.datetime.now(pytz.utc).replace(tzinfo=None).isoformat()
     jsonStr = json.dumps(vipQuotes, indent=4)
     with open(vipQuoteFile, "w") as outfile:
         outfile.write(jsonStr)
@@ -309,15 +315,15 @@ async def on_ready():
     )
 
     # just trying to debug here
-    
-    channels = '\n - '.join([channel.name + '-' + str(channel.id) for channel in guild.text_channels])
+    if False:
+        channels = '\n - '.join([channel.name + '-' + str(channel.id) for channel in guild.text_channels])
 
-    members = '\n - '.join([member.name + '-' + str(member.id) for member in guild.members])
-    roles = '\n - '.join([role.name + '-' + str(role.position) for role in guild.roles])
+        members = '\n - '.join([member.name + '-' + str(member.id) for member in guild.members])
+        roles = '\n - '.join([role.name + '-' + str(role.position) for role in guild.roles])
 
-    log(f'Guild Channels:\n - {channels}')
-    log(f'Guild Members:\n - {members}')
-    log(f'Guild Roles:\n - {roles}')
+        log(f'Guild Channels:\n - {channels}')
+        log(f'Guild Members:\n - {members}')
+        log(f'Guild Roles:\n - {roles}')
 
 import asyncio
 import traceback
