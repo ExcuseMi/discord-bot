@@ -246,6 +246,8 @@ async def readFullHistory( vipId):
     jsonStr = json.dumps(vipQuotes, indent=4)
     with open(vipQuoteFile, "w") as outfile:
         outfile.write(jsonStr)
+    print('Done Reading full history')
+
 
 
 async def readPartialHistory(vipId):
@@ -278,6 +280,7 @@ async def readPartialHistory(vipId):
     jsonStr = json.dumps(vipQuotes, indent=4)
     with open(vipQuoteFile, "w") as outfile:
         outfile.write(jsonStr)
+    print('Done Reading partial history')
 
 @bot.event
 async def on_ready():
