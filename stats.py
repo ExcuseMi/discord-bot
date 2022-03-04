@@ -42,7 +42,7 @@ def getStats(username, driver):
     content = driver.find_element(By.TAG_NAME, "body").text
     data = json.loads(content)
     if data:
-        ranksToRecord = ['Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3','Tournament Matches','Hoops','Snowday']
+        ranksToRecord = ['Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3','Tournament Matches','Hoops','Snowday','Rumble','Dropshot']
         userRanks = {}
         for segment in data.get('data').get('segments'):
             if segment.get('type') == 'playlist':
