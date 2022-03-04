@@ -197,7 +197,7 @@ async def _unregister(ctx,):
 @slash.slash(name="rl-playlists", description="Playlist I use to rank to you on this discord", guild_ids=guild_ids
 )
 async def _playlists(ctx):
-    await ctx.send('\n - '.join(playlists))
+    await ctx.send('\n'.join(playlists))
 
 
 
