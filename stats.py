@@ -14,10 +14,16 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 
 options.add_argument("--headless")
-#driver = webdriver.Chrome(options=options)
+driver = None
+while driver == None:
+    try:
+        driver = webdriver.Chrome(options=options)
+    except:
+        traceback.print_exc()
+        time.sleep(5)
+
 
 def getAllStats(users):
-    driver = webdriver.Chrome(options=options)
     map = {}
 
     for user in users:
@@ -25,13 +31,6 @@ def getAllStats(users):
             map[user] = getStats(user, driver)
         except:
             traceback.print_exc()
-        finally:
-            if driver:
-                try:
-                    driver.quit()
-                except:
-                    traceback.print_exc()
-
     return map
 
 

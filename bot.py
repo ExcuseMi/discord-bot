@@ -52,8 +52,8 @@ intents = discord.Intents.all()
 bot = commands.Bot(intents=discord.Intents.all(), command_prefix="rl")
 slash = SlashCommand(bot, sync_commands=True)
 guild_ids = [int(GUILD)] # Put your server ID in this array.
-playlists = ['Rumble']
-#playlists = ['Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3']
+#playlists = ['Rumble']
+playlists = ['Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3']
 
 actualGuild = None
 def getUsers():
