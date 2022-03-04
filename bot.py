@@ -83,12 +83,13 @@ def matchRank(rank):
 def getBestRank(stat):
     userRank = None
     ranknames = list(ranks.keys())
-    for s in stat:
-        if s in playlists:
-            matchedRank = matchRank(stat[s])
-            if matchedRank:
-                if userRank == None or ranknames.index(matchedRank) < ranknames.index(userRank):
-                    userRank = matchedRank
+    if stat:
+        for s in stat:
+            if s in playlists:
+                matchedRank = matchRank(stat[s])
+                if matchedRank:
+                    if userRank == None or ranknames.index(matchedRank) < ranknames.index(userRank):
+                        userRank = matchedRank
     return userRank
 
 def findRLRoles(member):

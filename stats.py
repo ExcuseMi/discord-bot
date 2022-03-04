@@ -14,7 +14,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 
 options.add_argument("--headless")
-driver = webdriver.Chrome(options=options)
+#driver = webdriver.Chrome(options=options)
 
 def getAllStats(users):
     driver = webdriver.Chrome(options=options)
@@ -22,7 +22,7 @@ def getAllStats(users):
 
     for user in users:
         try:
-            map[user] = getStats(user)
+            map[user] = getStats(user, driver)
         except:
             traceback.print_exc()
         finally:
@@ -35,7 +35,7 @@ def getAllStats(users):
     return map
 
 
-def getStats(username):
+def getStats(username, driver):
     url = 'https://api.tracker.gg/api/v2/rocket-league/standard/profile/epic/' + urllib.parse.quote(username)
     driver.get(url)
     driver.implicitly_wait(5)
