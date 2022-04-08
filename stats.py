@@ -48,7 +48,6 @@ def getStats(username, driver):
     driver.get(url)
     driver.implicitly_wait(5)
     content = driver.find_element(By.TAG_NAME, "body").text
-    print(content)
     data = json.loads(content)
     if data:
         ranksToRecord = ['Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3','Tournament Matches','Hoops','Snowday','Rumble','Dropshot']
@@ -67,8 +66,5 @@ def getRank(segment, name):
         division = segment.get('stats').get('division').get('metadata').get('name')
         mmr = segment.get('stats').get('rating').get('value')
         return { 'name': name, 'division': division, 'mmr': mmr}
-    return None
-newDriver()
+1    return None
 
-st = getStats('excusemi', driver)
-print(st)
