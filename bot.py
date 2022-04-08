@@ -377,5 +377,4 @@ async def updateStats():
         traceback.print_exc()
 
 bot.loop.create_task(my_background_task())
-
 bot.run(TOKEN)
