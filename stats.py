@@ -66,5 +66,5 @@ def getRank(segment, name):
         division = segment.get('stats').get('division').get('metadata').get('name')
         mmr = segment.get('stats').get('rating').get('value')
         return { 'name': name, 'division': division, 'mmr': mmr}
-1    return None
+    return None
 
