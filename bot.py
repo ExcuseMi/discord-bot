@@ -309,7 +309,8 @@ async def on_ready():
         if guild.name == GUILD:
             actualGuild = guild
             break
-    
+    channel = actualGuild.get_channel(959388254367518740)
+    channel.send(content="Me Me Me")
     #for role in guild.roles:
     #    if role.name in ranks.keys():
     #        await role.delete()
@@ -339,7 +340,8 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     if message.author.id == 238349304891310080:
-        await message.delete()
+        #await message.delete()
+        pass
         
 import asyncio
 import traceback
