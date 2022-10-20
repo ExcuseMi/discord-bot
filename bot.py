@@ -336,7 +336,11 @@ async def on_ready():
         log(f'Guild Channels:\n - {channels}')
         log(f'Guild Members:\n - {members}')
         log(f'Guild Roles:\n - {roles}')
-
+@bot.event
+async def on_message(message):
+    if message.author.id == 238349304891310080:
+        await message.delete()
+        
 import asyncio
 import traceback
 import threading
