@@ -308,9 +308,10 @@ async def on_ready():
     for guild in bot.guilds:
         if guild.name == GUILD:
             actualGuild = guild
+            channel = bot.get_channel(959388254367518740)
+            channel.send(content="Me Me Me")
+
             break
-    channel = actualGuild.get_channel(959388254367518740)
-    channel.send(content="Me Me Me")
     #for role in guild.roles:
     #    if role.name in ranks.keys():
     #        await role.delete()
