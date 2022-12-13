@@ -9,13 +9,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import urllib.parse
 import traceback
-from fake_useragent import UserAgent
-ua = UserAgent()
-user_agent = ua.random
-print(user_agent)
+#from fake_useragent import UserAgent
+#ua = UserAgent()
+#user_agent = ua.random
+#print(user_agent)
 
 options = webdriver.ChromeOptions()
-options.add_argument(f'user-agent={user_agent}')
+#options.add_argument(f'user-agent={user_agent}')
 
 options.add_argument("--mute-audio")
 options.add_argument("--headless")
